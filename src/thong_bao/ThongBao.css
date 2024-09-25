@@ -1,0 +1,25 @@
+.thong_bao_chung {
+  position: fixed;
+  z-index: 500;
+  max-width: 350px;
+  padding: 10px 25px;
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  background-color: blue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: calc(50% - 100px);
+  top: -60px;
+  transition: top 0.5s, opacity 1s;
+}
+.remove_thong_bao {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}

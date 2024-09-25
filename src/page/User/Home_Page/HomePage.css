@@ -1,0 +1,163 @@
+body {
+  overflow-x: hidden;
+  list-style: none;
+}
+summary {
+  position: relative;
+}
+input:focus {
+  outline: none;
+}
+.bold {
+  font-size: var(--size_bold);
+  font-weight: bold;
+}
+.icon {
+  position: relative;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.icon:hover::after {
+  content: attr(data-note);
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: normal;
+  z-index: 200;
+}
+.icon:hover::before {
+  content: "";
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 7.5px solid transparent;
+  border-right: 7.5px solid transparent;
+  border-bottom: 7.5px solid black;
+  z-index: 200;
+}
+.btn * {
+  cursor: pointer;
+}
+.logo-th {
+  max-width: calc(var(--size_logo-hang) * 3);
+}
+.logo-cn {
+  max-width: calc(var(--size_logo-hang) * 1.5);
+}
+.product {
+  position: relative;
+}
+
+.product > .add_gio_hang {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  display: none;
+  z-index: 100;
+}
+
+.add_gio_hang::after {
+  content: "+";
+  font-size: 16px;
+  color: blue;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 20px;
+}
+.product:hover > .add_gio_hang {
+  display: block;
+}
+
+:root {
+  --size_bold: 16px;
+  --size_logo-hang: 30px;
+}
+@media (min-width: 1010px) {
+  :root {
+    --size_bold: 20px;
+    --size_logo-hang: 45px;
+  }
+}
+#tongle_Menu {
+  position: fixed;
+  top: -5px;
+  bottom: 10px;
+  right: 0;
+  left: 0;
+  z-index: 201;
+}
+#menu {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+#close_menu {
+  background-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border: none;
+  z-index: 300;
+}
+#menu > #list_menu {
+  position: absolute;
+  left: 0px;
+  overflow-x: hidden;
+  height: 100vh;
+  z-index: 301;
+  display: flex;
+  transition: left 0.3s ease;
+}
+.transition-x-full {
+  left: -250px !important;
+}
+#list_menu_1 {
+  background-color: rgb(255, 255, 255);
+  width: 250px;
+}
+#list_ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+#list_ul > li {
+  border-top: 1px solid black;
+  padding: 10px 15px 10px 15px;
+  cursor: pointer;
+}
+#list_ul > li:hover {
+  background-color: rgb(211, 211, 211);
+}
+#list_ul > li > p {
+  margin: 0;
+}
+#list_ul > li:hover > p {
+  color: blue;
+  text-decoration: underline;
+}
+
+.collapse-horizontal {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.4s ease;
+}
+
+.collapse-horizontal.show {
+  width: 300px;
+}
+
+.nav_a {
+  cursor: pointer;
+  text-decoration: underline;
+}
