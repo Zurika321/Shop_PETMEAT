@@ -22,7 +22,7 @@ function App() {
           <Route path="product/:id" element={<ProductShow />} />
           <Route path="gio_hang" element={<GioHangPage />} />
         </Route>
-        <Route path="/login/*" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route
           path="/admin/*"
           element={

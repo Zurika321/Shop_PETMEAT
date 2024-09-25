@@ -5,6 +5,7 @@ import { useAuth } from "../../../../Processing/AuthContext";
 const HeaderUser: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const LinkPage_Nav = [
+    { text: "Giới thiệu", value: "/GioiThieu" },
     { text: "Đặt mua hàng", value: "#first_header" },
     { text: "Lịch sử mua hàng", value: "#first_header" },
     { text: "Dịch vụ thú cưng", value: "#first_header" },
@@ -163,7 +164,7 @@ const HeaderUser: React.FC = () => {
               </div>
             </div>
             <div className="col w-100 col-12 d-none d-md-flex order-last">
-              {LinkPage_Nav.slice(0, 4).map((item) => (
+              {LinkPage_Nav.slice(0, 5).map((item) => (
                 <a
                   key={`nav_link_1 - ${item.text}`}
                   href={item.value}

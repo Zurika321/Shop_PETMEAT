@@ -79,7 +79,7 @@ input:focus {
 
 :root {
   --size_bold: 16px;
-  --size_logo-hang: 30px;
+  --size_logo-hang: 28px;
 }
 @media (min-width: 1010px) {
   :root {

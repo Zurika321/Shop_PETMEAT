@@ -91,7 +91,7 @@ const ProductShow = () => {
             style={{ cursor: "pointer" }}
             onClick={() => (window.location.href = "/product")}
           >
-            Products
+            Product
           </span>
           <span className="mx-2">/</span>
           <span style={{ cursor: "pointer" }}>{product.title}</span>

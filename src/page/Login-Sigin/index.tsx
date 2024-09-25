@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../Processing/AuthContext";
 import AuthPage from "./login-sigin";
 
@@ -28,9 +28,7 @@ const LoginPage: React.FC = () => {
         )}
       </nav>
 
-      <Routes>
-        <Route path="/" element={<AuthPage />} />
-      </Routes>
+      <AuthPage />
     </div>
   );
 };
