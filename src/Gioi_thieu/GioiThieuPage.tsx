@@ -3,6 +3,7 @@ import styles from "./Gioithieucss.module.css";
 
 const GioiThieuPage: React.FC = () => {
   const [idvuanhap, setIdVuaNhap] = useState<string>("");
+  const [hello, setHello] = useState<string>("hello");
 
   const hoangRef = useRef<HTMLDivElement>(null);
   const khaRef = useRef<HTMLDivElement>(null);
