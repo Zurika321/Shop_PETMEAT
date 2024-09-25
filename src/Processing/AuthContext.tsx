@@ -162,7 +162,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           localStorage.setItem(`userInfo-${name}`, JSON.stringify(name));
           ThongBao.success("Đăng nhập thành công");
         } else {
-          ThongBao.warning("Sai mật khẩu");
+          ThongBao.error("Sai mật khẩu");
         }
       } else {
         setIsAuthenticated(true);

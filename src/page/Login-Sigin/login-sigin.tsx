@@ -39,7 +39,7 @@ const AuthPage: React.FC = () => {
           name: "",
         });
       } else {
-        ThongBao.show("Vui lòng điền đầy đủ");
+        ThongBao.warning("Vui lòng điền đầy đủ");
       }
     } else {
       if (InputOk) {
@@ -56,7 +56,7 @@ const AuthPage: React.FC = () => {
           if (resultRegister[errorIndex] === "") {
             ThongBao.warning("Vui lòng điền đầy đủ");
           } else {
-            ThongBao.warning(resultRegister[errorIndex]);
+            ThongBao.error(resultRegister[errorIndex]);
           }
           if (errorIndex === 0 && emailRef.current) {
             emailRef.current.focus();
@@ -106,6 +106,8 @@ const AuthPage: React.FC = () => {
 
       const validateName = () => {
         if (value.length === 0) return [newResult[0], newResult[1], ""];
+        if (value.includes("-"))
+          return [newResult[0], newResult[1], "Tên không thể chứa dấu '-'"];
         if (value === "admin")
           return [newResult[0], newResult[1], "Tên đã tồn tại"];
         return [newResult[0], newResult[1], "Tên hợp lệ"];

@@ -48,7 +48,7 @@ class ThongBao {
   }
 
   static error(thong_bao: string, x: number = 2) {
-    this.create_thong_bao(thong_bao, "red", "yellow", x);
+    this.create_thong_bao(thong_bao, "red", "white", x);
   }
   static success(thong_bao: string, x: number = 2) {
     this.create_thong_bao(thong_bao, "green", "white", x);
