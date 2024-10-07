@@ -43,12 +43,21 @@ const ProductNav = () => {
   }, []);
   const LinkPet = listPets.map((listpet, index) => (
     <div key={`linkPet - ${index}`}>
-      {listpet === "dog" && <h3>Pet:</h3>}
       <button
         className="btn btn-outline-primary mx-2"
         onClick={() => (window.location.href = `/product/${listpet}`)}
       >
         {listpet}
+      </button>
+    </div>
+  ));
+  const LinkTypes = types.map((type_, index) => (
+    <div key={`linkPet - ${index}`}>
+      <button
+        className="btn btn-outline-primary mx-2"
+        onClick={() => (window.location.href = `/product/${type_}`)}
+      >
+        {type_}
       </button>
     </div>
   ));
@@ -92,13 +101,24 @@ const ProductNav = () => {
           </>
         )}
       </div>
-      <div className="m-3 d-flex justify-content-center">
-        {!pet && (
-          <div className="d-block" style={{ flexDirection: "column" }}>
-            {LinkPet}
-          </div>
+      <div className="m-3 text-center">
+        {/* {!pet && (
+          <>
+            <h3>pet :</h3>
+            <div className="d-flex justify-content-center">{LinkPet}</div>
+            <br />
+          </>
+        )} */}
+        {!type && (
+          <>
+            <h3>pet :</h3>
+            <div className="d-flex justify-content-center">{LinkPet}</div>
+            <br />
+            <h3>type :</h3>
+            <div className="d-flex justify-content-center">{LinkTypes}</div>
+            <br />
+          </>
         )}
-        {/* {!type && <>{LinkPet}</>} */}
       </div>
     </>
   );

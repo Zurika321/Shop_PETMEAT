@@ -5,6 +5,7 @@ import GioHang from "../page/User/Gio_hang/GioHang";
 import Product from "./Product";
 import { db } from "../firebase";
 import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
+import ProductNav from "./ProductNav";
 
 const ProductShow = () => {
   const { pet, type, id } = useParams();
@@ -160,25 +161,8 @@ const ProductShow = () => {
 
   return (
     <div>
+      <ProductNav />
       <div className="container my-3">
-        <div style={{ fontWeight: "100" }} className="col col-12 mb-3">
-          <span onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
-            Home
-          </span>
-          <span className="mx-2">/</span>
-          <span
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("/product")}
-          >
-            Product
-          </span>
-          <span className="mx-2">/</span>
-          {!product ? (
-            <span style={{ cursor: "pointer" }}>...</span>
-          ) : (
-            <span style={{ cursor: "pointer" }}>{product.title}</span>
-          )}
-        </div>
         <div className="row d-flex justify-content-center">
           <div className="col col-11 col-md-4 d-flex justify-content-center mb-2 mb-md-0">
             <img
