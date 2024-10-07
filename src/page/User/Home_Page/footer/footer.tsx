@@ -1,9 +1,6 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
 
 const FooterUser: React.FC = () => {
-  const location = useLocation();
-  const atHome = location.pathname === "/";
   return (
     <>
       <footer className="bg-light text-center text-lg-start mt-5">
@@ -88,36 +85,28 @@ const FooterUser: React.FC = () => {
           <div className="row d-flex justify-content-center align-items-center g-2 g-sm-3 g-md-5">
             <div className="col col-auto">
               <img
-                src={`${
-                  !atHome ? "../" : ""
-                }image/logo/thuong_hieu_hop_tac/logoct.webp`}
+                src="/image/logo/thuong_hieu_hop_tac/logoct.webp"
                 className="img-fluid logo-th"
                 alt="logoct"
               />
             </div>
             <div className="col col-auto">
               <img
-                src={`${
-                  !atHome ? "../" : ""
-                }image/logo/thuong_hieu_hop_tac/logodcma2.webp`}
+                src="/image/logo/thuong_hieu_hop_tac/logodcma2.webp"
                 className="img-fluid logo-th"
                 alt="logodcma2"
               />
             </div>
             <div className="col col-auto">
               <img
-                src={`${
-                  !atHome ? "../" : ""
-                }image/logo/thuong_hieu_hop_tac/logodmca.png`}
+                src="/image/logo/thuong_hieu_hop_tac/logodmca.png"
                 className="img-fluid logo-th"
                 alt="logodmca"
               />
             </div>
             <div className="col col-auto d-none d-sm-block">
               <img
-                src={`${
-                  !atHome ? "../" : ""
-                }image/logo/thuong_hieu_hop_tac/logoVNCLC.webp`}
+                src="/image/logo/thuong_hieu_hop_tac/logoVNCLC.webp"
                 className="img-fluid logo-cn"
                 alt="logoVNCLC"
               />

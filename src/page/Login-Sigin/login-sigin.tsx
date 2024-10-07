@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import { useAuth } from "../../Processing/AuthContext";
 import "./login.css";
 import ThongBao from "../../thong_bao/thong_bao";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -31,8 +33,8 @@ const AuthPage: React.FC = () => {
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isLogin) {
-      if (formData.name !== "" || formData.password !== "") {
-        login(formData.name, formData.password);
+      if (formData.email !== "" || formData.password !== "") {
+        login(formData.email, formData.password);
         setFormData({
           email: "",
           password: "",
@@ -44,6 +46,12 @@ const AuthPage: React.FC = () => {
     } else {
       if (InputOk) {
         register(formData.email, formData.password, formData.name);
+        setFormData({
+          email: "",
+          password: "",
+          name: "",
+        });
+        toggleForm();
       } else {
         let errorIndex = resultRegister.findIndex(
           (msg, index) =>
@@ -70,19 +78,42 @@ const AuthPage: React.FC = () => {
     }
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { id, value } = event.target;
     let newResult = [...resultRegister];
 
     if (!isLogin) {
-      const validateEmail = () => {
+      const validateEmail = async () => {
         const emailParts = value.split("@");
         if (value.length === 0) {
           return ["", newResult[1], newResult[2]];
         }
-        return value.endsWith("@gmail.com") && emailParts[0].length > 0
-          ? ["Email hợp lệ", newResult[1], newResult[2]]
-          : ["Email không hợp lệ", newResult[1], newResult[2]];
+
+        // Kiểm tra email hợp lệ trước
+        const isEmailValid =
+          value.endsWith("@gmail.com") && emailParts[0].length > 0;
+        if (!isEmailValid) {
+          return ["Email không hợp lệ", newResult[1], newResult[2]];
+        }
+
+        // Gọi Firebase API để kiểm tra email đã tồn tại
+        try {
+          // Truy vấn Firestore để kiểm tra email
+          const q = query(collection(db, "users"), where("email", "==", value));
+          const querySnapshot = await getDocs(q);
+
+          // Nếu có kết quả trong Firestore thì email đã tồn tại
+          if (!querySnapshot.empty) {
+            return ["Email đã tồn tại", newResult[1], newResult[2]];
+          }
+        } catch (error) {
+          console.error("Lỗi kiểm tra email:", error);
+          return ["Có lỗi khi kiểm tra email", newResult[1], newResult[2]];
+        }
+
+        return ["Email hợp lệ", newResult[1], newResult[2]];
       };
 
       const validatePassword = () => {
@@ -104,21 +135,33 @@ const AuthPage: React.FC = () => {
         return [newResult[0], "Mật khẩu hợp lệ", newResult[2]];
       };
 
-      const validateName = () => {
+      const validateName = async () => {
         if (value.length === 0) return [newResult[0], newResult[1], ""];
         if (value.includes("-"))
           return [newResult[0], newResult[1], "Tên không thể chứa dấu '-'"];
-        if (value === "admin")
-          return [newResult[0], newResult[1], "Tên đã tồn tại"];
-        return [newResult[0], newResult[1], "Tên hợp lệ"];
+        try {
+          // Truy vấn Firestore để kiểm tra tên người dùng
+          const q = query(collection(db, "users"), where("name", "==", value));
+          const querySnapshot = await getDocs(q);
+
+          // Nếu có kết quả trong Firestore thì tên đã tồn tại
+          if (!querySnapshot.empty) {
+            return [newResult[0], newResult[1], "Tên đã tồn tại"];
+          } else {
+            return [newResult[0], newResult[1], "Tên hợp lệ"];
+          }
+        } catch (error) {
+          console.error("Lỗi kiểm tra tên người dùng:", error);
+          return [newResult[0], newResult[1], "Có lỗi khi kiểm tra tên"];
+        }
       };
 
       if (id === "email") {
-        newResult = validateEmail();
+        newResult = await validateEmail();
       } else if (id === "password") {
         newResult = validatePassword();
       } else if (id === "name") {
-        newResult = validateName();
+        newResult = await validateName();
       }
 
       setResultRegister(newResult);
@@ -162,55 +205,55 @@ const AuthPage: React.FC = () => {
                     {isLogin ? "Đăng nhập" : "Đăng ký"}
                   </h2>
                   <form onSubmit={handleFormSubmit}>
-                    <div className="form-group input-container">
-                      <input
-                        type="text"
-                        ref={nameRef}
-                        className="form-control"
-                        id="name"
-                        placeholder=" "
-                        value={formData.name}
-                        onChange={handleInputChange}
-                      />
-                      <label htmlFor="name">Tên đăng nhập:</label>
-                      {resultRegister && resultRegister[2] && (
-                        <p
-                          className={
-                            resultRegister[2].includes("hợp lệ")
-                              ? "text-success"
-                              : "text-warning"
-                          }
-                        >
-                          {resultRegister[2]}
-                        </p>
-                      )}
-                    </div>
-
                     {!isLogin && (
                       <div className="form-group input-container">
                         <input
-                          type="email"
-                          ref={emailRef}
+                          type="text"
+                          ref={nameRef}
                           className="form-control"
-                          id="email"
+                          id="name"
                           placeholder=" "
-                          value={formData.email}
+                          value={formData.name}
                           onChange={handleInputChange}
                         />
-                        <label htmlFor="email">Email:</label>
-                        {resultRegister && resultRegister[0] && (
+                        <label htmlFor="name">Tên đăng nhập:</label>
+                        {resultRegister && resultRegister[2] && (
                           <p
                             className={
-                              resultRegister[0].includes("Email hợp lệ")
+                              resultRegister[2].includes("hợp lệ")
                                 ? "text-success"
                                 : "text-warning"
                             }
                           >
-                            {resultRegister[0]}
+                            {resultRegister[2]}
                           </p>
                         )}
                       </div>
                     )}
+
+                    <div className="form-group input-container">
+                      <input
+                        type="email"
+                        ref={emailRef}
+                        className="form-control"
+                        id="email"
+                        placeholder=" "
+                        value={formData.email}
+                        onChange={handleInputChange}
+                      />
+                      <label htmlFor="email">Email:</label>
+                      {resultRegister && resultRegister[0] && (
+                        <p
+                          className={
+                            resultRegister[0].includes("Email hợp lệ")
+                              ? "text-success"
+                              : "text-warning"
+                          }
+                        >
+                          {resultRegister[0]}
+                        </p>
+                      )}
+                    </div>
 
                     <div className="form-group input-container">
                       <input

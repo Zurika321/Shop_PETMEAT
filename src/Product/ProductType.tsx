@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../Processing/AuthContext";
 import GioHang from "../page/User/Gio_hang/GioHang";
 import Product from "./Product";
+import { useParams } from "react-router-dom";
 import ProductNav from "./ProductNav";
 
-const ProductAll = () => {
-  const { AllProducts, getListPet_Type } = useAuth();
+const ProductType = () => {
+  const { pet, type } = useParams();
+  const { GetDetailedPetProducts, getListPet_Type, AllProducts } = useAuth();
   const [visibleProducts, setVisibleProducts] = useState<number>(6);
   const [products, setProducts] = useState<Product[]>([]);
   const [hasMoreProducts, setHasMoreProducts] = useState<boolean>(true); // Thêm biến trạng thái
@@ -32,12 +34,57 @@ const ProductAll = () => {
         return;
       }
 
-      const allProducts = await AllProducts(visibleProducts, listPets, types);
-      setProducts(allProducts);
+      if (!pet || !type) {
+        if (pet) {
+          const index_listPets = listPets.indexOf(pet);
+          if (index_listPets === -1) {
+            setEndProduct(`Không tìm thấy danh sách pet: ${pet}`);
+            setHasMoreProducts(false);
+            return;
+          }
+          const allProducts = await AllProducts(visibleProducts, [pet], types);
+          setProducts(allProducts);
+          setLoading(false);
+          if (!allProducts) {
+            setHasMoreProducts(false); // Đánh dấu là không còn sản phẩm
+            setEndProduct("Lỗi khi lấy dữ liệu pet!");
+            setLoading(false);
+            return;
+          }
+
+          setProducts(allProducts);
+          setLoading(false);
+
+          // Kiểm tra xem còn sản phẩm không
+          if (allProducts.length < visibleProducts) {
+            setHasMoreProducts(false); // Đánh dấu là không còn sản phẩm
+            setEndProduct("Đã hết sản phẩm để loading!");
+          }
+          return;
+        }
+        console.error("pet hoặc type không hợp lệ");
+        setEndProduct("pet hoặc type không hợp lệ");
+        return;
+      }
+
+      const index_listPets = listPets.indexOf(pet);
+      if (index_listPets === -1) {
+        setEndProduct(`Không tìm thấy danh sách pet: ${pet}`);
+        setHasMoreProducts(false);
+        return;
+      }
+      const index_types = types.indexOf(type);
+      if (index_types === -1) {
+        setEndProduct(`Không tìm thấy danh sách type ${type} trong pet ${pet}`);
+        setHasMoreProducts(false);
+        return;
+      }
+      const result = await GetDetailedPetProducts(pet, type);
+      setProducts(result);
       setLoading(false);
 
       // Kiểm tra xem còn sản phẩm không
-      if (allProducts.length < visibleProducts) {
+      if (result.length < visibleProducts) {
         setHasMoreProducts(false); // Đánh dấu là không còn sản phẩm
         setEndProduct("Đã hết sản phẩm để loading!");
       }
@@ -132,7 +179,6 @@ const ProductAll = () => {
   return (
     <div>
       <ProductNav />
-
       <div className="container my-3">
         <div className="d-flex justify-content-between">
           <h4 className="text-uppercase">Tất cả sản phẩm</h4>
@@ -165,4 +211,4 @@ const ProductAll = () => {
   );
 };
 
-export default ProductAll;
+export default ProductType;

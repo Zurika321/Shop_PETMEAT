@@ -1,13 +1,14 @@
 import { useAuth } from "../../../Processing/AuthContext";
 import GioHang from "./GioHang";
+import Product from "./../../../Product/Product";
 
 const GioHangPage = () => {
-  const { getProductById } = useAuth();
+  //const { getProductById } = useAuth();
   const gio_hang = GioHang.getGioHang();
 
-  const productList = gio_hang
-    .map((id) => getProductById(id))
-    .filter((product) => product !== null);
+  const productList = gio_hang; //.map;
+  //((id) => getProductById(id))
+  //.filter((product) => product !== null);
 
   if (productList.length === 0) {
     return (
@@ -34,43 +35,47 @@ const GioHangPage = () => {
   }
 
   const productCards = productList.map((product, index) => (
-    <div
-      className="col col-lg-3 col-md-4 col-6 mb-4 col-xl-2 d-flex flex-column"
-      key={`product-${index}`}
-      onClick={() => (window.location.href = `/product/${product!.id}`)}
-    >
-      <div className="card flex-fill position-relative">
-        <img
-          src={`../image/vat_pham/${product!.image}`}
-          className="card-img-top"
-          alt={`Product ${index}`}
-        />
-        <div className="card-body">
-          <div className="card-title m-0">{product!.title}</div>
-          <div className="card-text d-flex m-0">
-            <p className="text-warning m-0">☆☆☆☆☆</p> (0)
-          </div>
-          <div className="card-text">
-            <span className="text-danger">{product!.price}$</span>
-          </div>
-        </div>
-        <div
-          className="form-check position-absolute"
-          style={{ bottom: "10px", right: "15px", zIndex: 1 }}
-        >
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id={`customCheck-${index}`}
-            style={{ accentColor: "#0d6efd", width: "25px", height: "25px" }}
-            onClick={(event) => {
-              event.stopPropagation();
-              //
-            }}
-          />
-        </div>
-      </div>
+    <div key={`product-${index}`}>
+      {product.id}
+      {product.quantity}
     </div>
+    // <div
+    //   className="col col-lg-3 col-md-4 col-6 mb-4 col-xl-2 d-flex flex-column"
+    //   key={`product-${index}`}
+    //   onClick={() => (window.location.href = `/product/${product!.id}`)}
+    // >
+    //   <div className="card flex-fill position-relative">
+    //     <img
+    //       src={`../image/vat_pham/${product!.image}`}
+    //       className="card-img-top"
+    //       alt={`Product ${index}`}
+    //     />
+    //     <div className="card-body">
+    //       <div className="card-title m-0">{product!.title}</div>
+    //       <div className="card-text d-flex m-0">
+    //         <p className="text-warning m-0">☆☆☆☆☆</p> (0)
+    //       </div>
+    //       <div className="card-text">
+    //         <span className="text-danger">{product!.price}$</span>
+    //       </div>
+    //     </div>
+    //     <div
+    //       className="form-check position-absolute"
+    //       style={{ bottom: "10px", right: "15px", zIndex: 1 }}
+    //     >
+    //       <input
+    //         type="checkbox"
+    //         className="form-check-input"
+    //         id={`customCheck-${index}`}
+    //         style={{ accentColor: "#0d6efd", width: "25px", height: "25px" }}
+    //         onClick={(event) => {
+    //           event.stopPropagation();
+    //           //
+    //         }}
+    //       />
+    //     </div>
+    //   </div>
+    // </div>
   ));
 
   return (

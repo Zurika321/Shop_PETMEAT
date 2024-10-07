@@ -11,6 +11,8 @@ import { AuthProvider } from "./Processing/AuthContext";
 import NotFoundPage from "./Notfound";
 import ProductAll from "./Product/AllProduct";
 import GioiThieuPage from "./Gioi_thieu/GioiThieuPage";
+import TestPage from "./test";
+import ProductType from "./Product/ProductType";
 
 function App() {
   return (
@@ -19,10 +21,13 @@ function App() {
         <Route path="/" element={<HomePage />}>
           <Route index element={<MainUser />} />
           <Route path="product" element={<ProductAll />} />
-          <Route path="product/:id" element={<ProductShow />} />
+          <Route path="product/:pet/:type/:id" element={<ProductShow />} />
+          <Route path="product/:pet/:type" element={<ProductType />} />
+          <Route path="product/:pet" element={<ProductType />} />
           <Route path="gio_hang" element={<GioHangPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/TestPage" element={<TestPage />} />
         <Route
           path="/admin/*"
           element={

@@ -19,6 +19,7 @@ const HeaderUser: React.FC = () => {
     { text: "Đổi trả", value: "#first_header" },
   ];
   const { isAuthenticated, NameUser, logout } = useAuth();
+
   const toggleMenu = () => {
     const menuElement = document.getElementById("list_menu");
     if (menuElement) {
@@ -166,7 +167,7 @@ const HeaderUser: React.FC = () => {
             <div className="col w-100 col-12 d-none d-md-flex order-last">
               {LinkPage_Nav.slice(0, 5).map((item) => (
                 <a
-                  key={`nav_link_1 - ${item.text}`}
+                  key={`nav_link_header - ${item.text}`}
                   href={item.value}
                   className="mx-1 btn btn-primary p-0 px-2"
                   style={{ height: "25px", textDecoration: "none" }}
@@ -232,9 +233,9 @@ const HeaderUser: React.FC = () => {
                     </div>
                     <nav className="pb-5">
                       <ul id="list_ul">
-                        {LinkPage_Nav.map((item) => (
+                        {LinkPage_Nav.map((item, index) => (
                           <li
-                            key={`nav_link_2 - ${item.text}`}
+                            key={`nav_link_menu - ${item.text} - ${index}`}
                             onClick={() => {
                               window.location.href = `${item.value}`;
                             }}

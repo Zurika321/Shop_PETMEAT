@@ -1,3 +1,4 @@
+// Product.ts
 class Product {
   id: string;
   title: string;
@@ -5,6 +6,8 @@ class Product {
   note: string;
   quantity: string;
   price: string;
+  pet: string;
+  type: string;
 
   constructor(
     id: string,
@@ -12,7 +15,9 @@ class Product {
     image: string,
     note: string,
     quantity: string,
-    price: string
+    price: string,
+    pet: string,
+    type: string
   ) {
     this.id = id;
     this.title = title;
@@ -20,9 +25,10 @@ class Product {
     this.note = note;
     this.quantity = quantity;
     this.price = price;
+    this.pet = pet;
+    this.type = type;
   }
 
-  // Phương thức để lấy thông tin sản phẩm dưới dạng mảng
   toArray(): string[] {
     return [
       this.id,
@@ -31,6 +37,8 @@ class Product {
       this.note,
       this.quantity,
       this.price,
+      this.pet,
+      this.type,
     ];
   }
 }

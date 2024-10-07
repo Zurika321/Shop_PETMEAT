@@ -1,47 +1,115 @@
 import GioHang from "../../Gio_hang/GioHang";
 import { useAuth } from "../../../../Processing/AuthContext";
+import { useEffect, useState } from "react";
+import Product from "../../../../Product/Product";
 
 const MainUser = () => {
-  const { products } = useAuth();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // Thêm biến trạng thái loading
+  const { AllProducts, getListPet_Type } = useAuth();
+  const [endProduct, setEndProduct] = useState<string>("");
 
-  const productCards = products.slice(0, 12).map((product, index) => (
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const petsAndTypes = await getListPet_Type(); // Gọi hàm lấy danh sách thú cưng và loại
+
+      if (!petsAndTypes) {
+        setEndProduct("Không thể fetch pet và types.");
+        setLoading(false); // Kết thúc tải nếu không lấy được dữ liệu
+        return; // Thoát hàm nếu không có dữ liệu
+      }
+
+      const listPets: string[] = petsAndTypes[0] || [];
+      const types: string[] = petsAndTypes[1] || []; // Lấy danh sách loại thú cưng
+
+      if (listPets.length === 0 || types.length === 0) {
+        setEndProduct("Không tìm thấy danh sách");
+        setLoading(false); // Kết thúc tải
+        return; // Thoát hàm nếu không có thú cưng hoặc loại
+      }
+
+      const allProducts = await AllProducts(12, listPets, types); // Lấy tất cả sản phẩm
+      setProducts(allProducts); // Cập nhật sản phẩm
+      setLoading(false); // Kết thúc tải
+    };
+
+    fetchProducts(); // Gọi hàm lấy sản phẩm
+  }, []); // Chạy một lần khi component mount
+
+  const LoadProductCard = Array.from({ length: 6 }, (_, index) => (
     <div
       className="col col-lg-3 col-md-4 col-6 mb-4 col-xl-2 product d-flex flex-column"
-      key={`product-${index}`}
-      onClick={() => (window.location.href = `/product/${product!.id}`)}
+      key={`no-product-${index}`}
     >
-      <div
-        className="add_gio_hang"
-        onClick={(event) => {
-          event.stopPropagation();
-          GioHang.addProduct(`${product!.id}`);
-        }}
-      >
-        <button className="btn btn-primary">
-          <i
-            className="fa-solid fa-cart-shopping"
-            style={{ fontSize: "20px" }}
-          ></i>
-        </button>
-      </div>
       <div className="card flex-fill">
         <img
-          src={`../image/vat_pham/${product!.image}`}
+          src="https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca_w200.gif"
           className="card-img-top"
           alt={`Product ${index}`}
         />
         <div className="card-body">
-          <div className="card-title m-0">{product!.title}</div>
+          <div className="card-title m-0">...</div>
           <div className="card-text d-flex m-0">
             <p className="text-warning m-0">☆☆☆☆☆</p> (0)
           </div>
           <div className="card-text">
-            <span className="text-danger">{product!.price}$</span>
+            <span className="text-danger">..$</span>
           </div>
         </div>
       </div>
     </div>
   ));
+
+  const productCards =
+    products.length === 0 ? (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "250px" }}
+      >
+        <h3>{endProduct}</h3>
+      </div>
+    ) : (
+      products.map((product, index) => (
+        <div
+          className="col col-lg-3 col-md-4 col-6 mb-4 col-xl-2 product d-flex flex-column"
+          key={`product-${index}`}
+          onClick={() =>
+            (window.location.href = `/product/${product.pet}/${product.type}/${product.id}`)
+          }
+        >
+          <div
+            className="add_gio_hang"
+            onClick={(event) => {
+              event.stopPropagation();
+              GioHang.addProduct(`${product.id}`, 1);
+            }}
+          >
+            <button className="btn btn-primary">
+              <i
+                className="fa-solid fa-cart-shopping"
+                style={{ fontSize: "20px" }}
+              ></i>
+            </button>
+          </div>
+          <div className="card flex-fill">
+            <img
+              src={`/image/vat_pham/${product.image}`}
+              className="card-img-top"
+              alt={`Product ${index}`}
+            />
+            <div className="card-body">
+              <div className="card-title m-0">{product.title}</div>
+              <div className="card-text d-flex m-0">
+                <p className="text-warning m-0">☆☆☆☆☆</p> (0)
+              </div>
+              <div className="card-text">
+                <span className="text-danger">{product.price}$</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))
+    );
 
   const ServiceCards = Array.from({ length: 4 }, (_, index) => (
     <div
@@ -80,7 +148,7 @@ const MainUser = () => {
                   alt=""
                   className="img-fluid w-100"
                 />
-                <h5 className="float-end">Mr.Hải</h5>
+                <h5 className="text-center">Mr.Hải</h5>
               </div>
             </div>
             <div className="col col-lg-8 col-md-8 p-2 order-first">
@@ -121,11 +189,15 @@ const MainUser = () => {
             </a>
           </div>
           <hr />
-          <div className="row">{productCards}</div>
+          {loading ? ( // Kiểm tra trạng thái loading
+            <div className="row">{LoadProductCard}</div>
+          ) : (
+            <div className="row">{productCards}</div>
+          )}
           <button
             className="w-100 btn btn-primary d-sm-none text-uppercase rounded-pill"
             onClick={() => {
-              window.location.href = "/products";
+              window.location.href = "/product";
             }}
           >
             Xem tất cả sản phẩm &gt;

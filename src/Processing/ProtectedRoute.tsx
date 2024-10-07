@@ -12,11 +12,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
-  } else if (NameUser === "admin") {
-    return <>{children}</>;
+  } else {
+    if (NameUser === "admin") {
+      return <>{children}</>;
+    } else {
+      return <Navigate to="/#" />;
+    }
   }
-
-  return <Navigate to="/#" />;
 };
 
 export default ProtectedRoute;
